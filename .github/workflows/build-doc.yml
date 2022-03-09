@@ -1,0 +1,47 @@
+name: Build Docs
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '**'
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: install sphinx
+      run: pip install sphinx
+
+    - name: install sphinx_rtd_theme
+      run: pip install sphinx_rtd_theme
+
+    - name: clean site
+      run: make clean
+
+    - name: build site
+      run: make html
+
+    - name: copy to site
+      run: cp -R /home/runner/work/wordlift/wordlift/_build/html/ /home/runner/work/wordlift/wordlift/site
+
+    - name: Deploy to Netlify
+      uses: nwtgck/actions-netlify@v1.2
+      with:
+        publish-dir: './site'
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        enable-commit-comment: false
+        alias: wordlift
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
