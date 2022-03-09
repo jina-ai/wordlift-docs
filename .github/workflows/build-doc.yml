@@ -27,13 +27,13 @@ jobs:
       run: pip install sphinx_rtd_theme
 
     - name: clean site
-      run: make clean
+      run: /home/runner/work/wordlift-docs/wordlift-docs/docs/make clean
 
     - name: build site
-      run: make html
+      run: /home/runner/work/wordlift-docs/wordlift-docs/docs/make html
 
     - name: copy to site
-      run: cp -R /home/runner/work/wordlift/wordlift/_build/html/ /home/runner/work/wordlift/wordlift/site
+      run: cp -R /home/runner/work/wordlift-docs/wordlift-docs/docs/_build/html/ /home/runner/work/wordlift-docs/wordlift-docs/site
 
     - name: Deploy to Netlify
       uses: nwtgck/actions-netlify@v1.2
